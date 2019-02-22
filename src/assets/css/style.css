@@ -1,0 +1,25 @@
+html,body{
+    height: 100%;
+}
+.button-row{
+    padding:5px 0;
+}
+h1{
+    font-size: 1.5em;
+}
+
+.breadcrumb{
+    margin:10px 0;
+}
+.custom-error{
+    display: block;
+}
+#root{
+    height: 100%;    
+}
+.wrapper{
+    border:solid 1px #dedede;
+    padding:15px;
+    min-height: 700px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,.1);
+}
