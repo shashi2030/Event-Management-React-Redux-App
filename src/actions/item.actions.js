@@ -130,5 +130,44 @@ export const pagingClick = (id,countPerpage) =>{
     }    
 }
 
+/* get items */
+export const viewItemData = (data) =>{
+    return{
+        type:ACTION.VIEW_ITEM,
+        payload:data
+    }
+}
+export const getItem = (id) =>{
+    return dispatch =>{
+        itemActions.viewItem(id)
+            .then(response => {
+                dispatch(viewItemData(response.data))
+            })
+            .catch(error => {
+                dispatch(fetchDataFailed())
+            });
+    }   
+}
+
+export const edititemdata = (data) =>{
+    return{
+        type:ACTION.EDIT_ITEM,
+        payload:data
+    }
+}
+
+/* edit items */
+export const editItem = (id, itemdata) =>{
+    return dispatch =>{
+        itemActions.editItem(id, itemdata)
+            .then(response => {
+                console.log(response)
+                dispatch(edititemdata(itemdata))
+            })
+            .catch(error => {
+                dispatch(fetchDataFailed())
+            });
+    }   
+}
 
 

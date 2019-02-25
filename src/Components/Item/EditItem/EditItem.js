@@ -10,6 +10,8 @@ import { Layout } from '../../Common/Layout/Layout';
 import { itemActions } from '../../../services/item.actions';
 import BreadCrumb from '../../Common/Breadcrumb/Breadcrumb';
 import { AlertBox } from '../../Common/AlertBox/AlertBox';
+import { connect } from 'react-redux';
+import * as actionItem  from '../../../actions/item.actions';
 
 /**
  * Define constant for the Item Form
@@ -18,10 +20,10 @@ const itemform = {
     id: null,
     name: "",
     description: "",
-    submitted: false,
-    saveEnable: false,
     errormessage: "",
-    alertVisible: false
+    alertVisible: false,
+    submitted: false,
+    saveEnable: false
 }
 
 /**
@@ -77,26 +79,17 @@ class EditItem extends Component {
      * @return {null}
      */
     componentDidMount() {
-        this.getItem();
+        const id = this.props.match.params.id;
+        this.props.getItem(id);
+        let _self = this;
+        setTimeout(function(){
+            _self.setState({
+                ..._self.props.viewItem
+            })
+        },0)
     }
 
-    /**
-     * Description: getItem function to fetch the item data based on params id
-     * @param  {null}
-     * @return {null}
-     */
-    getItem = () => {
-        const id = this.props.match.params.id;
-        itemActions.viewItem(id).then(response => {
-            let newData = response.data
-            this.setState({
-                ...newData,
-                data: response.data
-            })
-        }).catch((error) => {
-            console.log(error);
-        })
-    }
+    
 
     /**
      * Description: handleSubmit will call when item update form
@@ -113,6 +106,8 @@ class EditItem extends Component {
             name: name,
             description: description
         };
+        this.props.editItem(id, itemdata);
+        return;
 
         if (name) {
             itemActions.editItem(id, itemdata).then(response => {
@@ -157,6 +152,7 @@ class EditItem extends Component {
      */
     render() {
         const { id, name, description, submitted, errormessage } = this.state;
+        console.log(this.state)
         const breadcrumbdata = [
             {
                 "id": "home",
@@ -188,7 +184,7 @@ class EditItem extends Component {
                     <Col sm="12" md={{ size: 8, offset: 2 }}>
                         <Form onSubmit={this.handleSubmit}>
                             <FormGroup row>
-                                <Label for="username" sm={3}>User Id</Label>
+                                <Label for="itemid" sm={3}>Item Id</Label>
                                 <Col sm={9}>
                                     <p>{id}</p>
                                 </Col>
@@ -221,4 +217,16 @@ class EditItem extends Component {
     }
 }
 
-export default EditItem;
+const mapStateToProps = state => {
+    return {
+        viewItem: state.viewItem
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        getItem: (id) => dispatch(actionItem.getItem(id)),
+        editItem:(id, itemdata) =>dispatch(actionItem.editItem(id, itemdata))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditItem);

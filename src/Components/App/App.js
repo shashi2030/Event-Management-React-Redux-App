@@ -17,6 +17,7 @@ import ListItem from '../Item/ListItem/ListItem';
 import EditItem from '../Item/EditItem/EditItem';
 import ListEvent from '../Event/ListEvent/ListEvent';
 import EditEvent from '../Event/EditEvent/EditEvent';
+import ViewItem from '../Item/ViewItem/ViewItem';
 require('../../assets/css/style.css');
 class App extends Component {
   render() {
@@ -37,6 +38,7 @@ class App extends Component {
           <Route exact path="/listevent" component={ListEvent} />
           <Route exact path="/createitem" component={CreateItem} />
           <Route exact path="/edititem/:id" component={EditItem} />
+          <Route exact path="/viewitem/:id" component={ViewItem} />
           <Route exact path="/listitem" component={ListItem} />
         </Switch>
       </HashRouter>

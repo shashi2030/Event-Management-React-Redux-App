@@ -71,7 +71,6 @@ class Grid extends Component {
      * @return {Object}
      */
     render() {
-        console.log(this.props)
         const pageNumbers = [];
         const totalPagingLength = Math.ceil(this.props.totalDataCount / this.props.countPerPage);
         for (let i = 1; i <= totalPagingLength; i++) {

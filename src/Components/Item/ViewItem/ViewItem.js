@@ -7,59 +7,24 @@
 import React, { Component } from 'react';
 import { Row, Col, Button, Form, FormGroup, Label } from 'reactstrap';
 import { Layout } from '../../Common/Layout/Layout';
-import { userActions } from '../../../actions/users.actions';
 import BreadCrumb from '../../Common/Breadcrumb/Breadcrumb';
+import { connect } from 'react-redux';
+import * as actionItem  from '../../../actions/item.actions';
+
 
 /**
- * Define constant for the View User
- */
-const userform = {
-    id: null,
-    username: "",
-    buildingname: "",
-    flatno: ""
-}
-
-/**
- * @name ViewUser
+ * @name ViewItem
  * @extends React.Component
  */
-class ViewUser extends Component {
-
-    /**
-     * State is initialised
-     * 1) handle projection field attribute
-     * @param {object} props 
-     */
-    constructor(props) {
-        super(props);
-        this.state = userform;
-    }
-
+class ViewItem extends Component {
     /**
      * Description: Call Get User on Page Load
      * @param  {null}
      * @return {null}
      */
     componentDidMount() {
-        this.getUser();
-    }
-
-    /**
-     * Description: getUser function to fetch the user data based on params id
-     * @param  {null}
-     * @return {null}
-     */
-    getUser = () => {
         const id = this.props.match.params.id;
-        userActions.viewUser(id).then(response => {
-            let data = response.data;
-            this.setState({
-                ...data
-            })
-        }).catch((error) => {
-            console.log(error);
-        })
+        this.props.getItem(id)
     }
 
     /**
@@ -76,9 +41,9 @@ class ViewUser extends Component {
      * @param {null}
      * @return {null}
      */
-    userEdit = () => {
+    itemEdit = () => {
         const id = this.props.match.params.id;
-        this.props.history.push('/edituser/' + id);
+        this.props.history.push('/edititem/' + id);
     }
 
     /**
@@ -87,7 +52,7 @@ class ViewUser extends Component {
      * @return {Object}
      */
     render() {
-        const { id, username, buildingname, flatno } = this.state;
+        const { id, name, description} = this.props.viewItem;
         const breadcrumbdata = [
             {
                 "id": "home",
@@ -116,34 +81,28 @@ class ViewUser extends Component {
                 <h1>View User</h1>
                 <Row>
                     <Col sm="12" md={{ size: 8, offset: 2 }}>
-                        <Form onSubmit={this.userEdit}>
+                        <Form onSubmit={this.itemEdit}>
                             <FormGroup row>
-                                <Label for="userid" sm={3}>User Id</Label>
+                                <Label for="userid" sm={3}>Item Id</Label>
                                 <Col sm={9}>
                                     <p>{id}</p>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label for="username" sm={3}>Username</Label>
+                                <Label for="name" sm={3}>Name</Label>
                                 <Col sm={9}>
-                                    <p>{username}</p>
+                                    <p>{name}</p>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label for="buildingname" sm={3}>Building Name</Label>
+                                <Label for="description" sm={3}>Description</Label>
                                 <Col sm={9}>
-                                    <p>{buildingname}</p>
-                                </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                                <Label for="flatno" sm={3}>Flat No</Label>
-                                <Col sm={9}>
-                                    <p>{flatno}</p>
+                                    <p>{description}</p>
                                 </Col>
                             </FormGroup>
                             <FormGroup>
                                 <Col sm={{ size: 9, offset: 3 }}>
-                                    <Button type="button" onClick={this.userEdit} color="primary">Edit</Button>{' '}
+                                    <Button type="button" onClick={this.itemEdit} color="primary">Edit</Button>{' '}
                                     <Button type="button" onClick={this.handleback} color="secondary">Cancel</Button>
                                 </Col>
                             </FormGroup>
@@ -155,4 +114,15 @@ class ViewUser extends Component {
     }
 }
 
-export default ViewUser;
+const mapStateToProps = state => {
+    return {
+        viewItem: state.viewItem
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        getItem: (id) => dispatch(actionItem.getItem(id))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewItem);

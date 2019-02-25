@@ -161,7 +161,6 @@ class ListItem extends Component {
     }
 }
 const mapStateToProps = state => {
-    console.log(state);
     return {
         listitem: state.itemReducer
     }
